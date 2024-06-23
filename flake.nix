@@ -28,14 +28,38 @@
             program = "${exec}/bin/${name}";
           };
 
+          jplagjar = "jplag-4.2.0-jar-with-dependencies.jar";
+          
         in with pkgs;
           {
+            ###################################################################
+            #                             Packages                            #
+            ###################################################################
+            packages = {
+              jplag = stdenv.mkDerivation {
+                name = "jplag";
+
+                src = ./.;
+
+                runtimeInputs = [jre_minimal];
+                nativeBuildInputs = [ makeWrapper ];
+                
+                installPhase = ''
+                   mkdir -p $out/bin
+                   mkdir -p $out/share
+                   cp $src/${jplagjar} $out/share/${jplagjar}
+                   makeWrapper ${jre_minimal}/bin/java $out/bin/jplag --add-flags "-jar $out/share/${jplagjar}"
+                '';
+              };
+              
+            };
+            
             ###################################################################
             #                             scripts                             #
             ###################################################################
             apps = {
               default = simple_script "jplag" [] ''
-                  java -jar ${self}/jplag-4.2.0-jar-with-dependencies.jar "''$@"
+                  ${jre_minimal}/bin/java -jar ${self}/${jplagjar} "''$@"
               '';
 
             };
