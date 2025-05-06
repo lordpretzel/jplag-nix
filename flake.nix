@@ -20,7 +20,7 @@
             exec = pkgs.writeShellApplication {
               inherit name text;
               runtimeInputs = with pkgs; [
-                jre_minimal
+                temurin-jre-bin
               ] ++ add_deps;
             };
           in {
@@ -41,14 +41,14 @@
 
                 src = ./.;
 
-                runtimeInputs = [jre_minimal];
+                runtimeInputs = [temurin-jre-bin];
                 nativeBuildInputs = [ makeWrapper ];
 
                 installPhase = ''
                    mkdir -p $out/bin
                    mkdir -p $out/share
                    cp $src/${jplagjar} $out/share/${jplagjar}
-                   makeWrapper ${jre_minimal}/bin/java $out/bin/jplag --add-flags "-jar $out/share/${jplagjar}"
+                   makeWrapper ${temurin-jre-bin}/bin/java $out/bin/jplag --add-flags "-jar $out/share/${jplagjar}"
                 '';
               };
 
@@ -59,7 +59,7 @@
             ###################################################################
             apps = {
               default = simple_script "jplag" [] ''
-                  ${jre_minimal}/bin/java -jar ${self}/${jplagjar} "''$@"
+                  ${temurin-jre-bin}/bin/java -jar ${self}/${jplagjar} "''$@"
               '';
 
             };
@@ -71,11 +71,11 @@
               mkShell
                 {
                   nativeBuildInputs = with pkgs; [
-                    jre_minimal
+                    temurin-jre-bin
                     charasay
                   ];
                   shellHook = ''
-                      echo "${jre_minimal}" | chara say
+                      echo "${temurin-jre-bin}" | chara say
                   '';
                 };
           }
