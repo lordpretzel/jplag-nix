@@ -28,8 +28,8 @@
             program = "${exec}/bin/${name}";
           };
 
-          jplagjar = "jplag-4.2.0-jar-with-dependencies.jar";
-          
+          jplagjar = "jplag-6.1.0-jar-with-dependencies.jar";
+
         in with pkgs;
           {
             ###################################################################
@@ -43,7 +43,7 @@
 
                 runtimeInputs = [jre_minimal];
                 nativeBuildInputs = [ makeWrapper ];
-                
+
                 installPhase = ''
                    mkdir -p $out/bin
                    mkdir -p $out/share
@@ -51,9 +51,9 @@
                    makeWrapper ${jre_minimal}/bin/java $out/bin/jplag --add-flags "-jar $out/share/${jplagjar}"
                 '';
               };
-              
+
             };
-            
+
             ###################################################################
             #                             scripts                             #
             ###################################################################
